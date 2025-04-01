@@ -1,10 +1,17 @@
 import express from 'express'
+import dotenv  from 'dotenv';
 import './mongo.connect.js'
 import cors from 'cors'
 import User from './model/userModel.js';
 import userApi from './route/userRoute.js';
+
+
+dotenv.config()
+const Port = process.env.PORT || 4000
+
 const app = express();
 app.use(express.json())
+app.use(cors)
 
 
 /*
@@ -37,4 +44,5 @@ const chq = (req,res,next)=>{
 
 app.use('/user',chq,userApi)
 
-app.listen(5000, () => { console.log("app is running at http://127.0.0.1:5000") })
+
+app.listen(Port, () => { console.log(`app is running at http://127.0.0.1:${Port}`) })
