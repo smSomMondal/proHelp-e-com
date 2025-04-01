@@ -1,0 +1,40 @@
+import express from 'express'
+import './mongo.connect.js'
+import cors from 'cors'
+import User from './model/userModel.js';
+import userApi from './route/userRoute.js';
+const app = express();
+app.use(express.json())
+
+
+/*
+app.post("/signup", async(req, res) => {
+    try {
+        const { name, email, password, type, contact, address } = req.body;
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+        // Create new user
+        const newUser = new User({ name, email, password, type, contact, address });
+        await newUser.save();
+
+        res.status(201).json({ message: "User created successfully", user: newUser });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+})
+*/
+
+
+//middleware
+const chq = (req,res,next)=>{
+    console.log("here chq");
+    next()
+}
+
+
+app.use('/user',chq,userApi)
+
+app.listen(5000, () => { console.log("app is running at http://127.0.0.1:5000") })
