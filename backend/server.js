@@ -4,6 +4,7 @@ import './mongo.connect.js'
 import cors from 'cors'
 import User from './model/userModel.js';
 import userApi from './route/userRoute.js';
+import productApi from './route/productRoute.js';
 
 
 dotenv.config()
@@ -36,13 +37,21 @@ app.post("/signup", async(req, res) => {
 
 
 //middleware
+
+/*
 const chq = (req,res,next)=>{
     console.log("here chq");
     next()
 }
+const cqq=(req,res)=>{
+    return res.send("hii");
+}*/
+app.get('/',(req,res)=>{
+    res.send("hiiii234")
+})
 
-
-app.use('/user',chq,userApi)
+app.use('/user',userApi)
+app.use('/product',productApi)
 
 
 app.listen(Port, () => { console.log(`app is running at http://127.0.0.1:${Port}`) })
