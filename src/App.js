@@ -1,31 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProductPage from './components/ProductPage';
+import AllProducts from './components/AllProducts';
 
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Home from './test/Home';
-import Contact from './test/Contact';
-import About from './test/About';
 
 function App() {
-
-  const user = {
-    name: "Alice",
-    contact: {
-      email: "alice@example.com",
-      phone: "123-456-7890"
-    }
-  };
-
   return (
-    <>
-      <BrowserRouter>
+    <Router>
+      <div className="App">
         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/con' element={<Contact/>}/>
-          <Route path='abo' element={<About userInfo={user} />} />
+          
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/all-products" element={<AllProducts />} />
         </Routes>
-      </BrowserRouter>
-    </>
+      </div>
+    </Router>
   );
 }
 
