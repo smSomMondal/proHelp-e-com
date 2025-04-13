@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import "./Login.css";
-
+import { useContext } from "react";
+import { UserContext } from "../context/userContext";
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [name, setName] = useState("");
-    const [email, setEmail] = useState(""); 
+    const [email, setEmail] = useState("");
     const [contact, setContact] = useState("");
     const [userType, setUserType] = useState(""); // Added userType state
-    const [password, setPassword] = useState("");   
+    const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
+
+    const { login } = useContext(UserContext);
 
     const togglePasswordVisibility = () => {
         setShowPassword((prevState) => !prevState);
@@ -100,11 +103,11 @@ const Signup = () => {
                             <div className="input-wrapper">
                                 <div style={{ width: "100%", display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-around' }}>
                                     <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-                                        <input type="radio" name="userType" value="buyer" className="form-input" onChange={(e)=>setUserType(e.target.value)} />
+                                        <input type="radio" name="userType" value="buyer" className="form-input" onChange={(e) => setUserType(e.target.value)} />
                                         Buyer
                                     </label>
                                     <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-                                        <input type="radio" name="userType" value="seller" className="form-input" onChange={(e)=>setUserType(e.target.value)} />
+                                        <input type="radio" name="userType" value="seller" className="form-input" onChange={(e) => setUserType(e.target.value)} />
                                         Seller
                                     </label>
                                 </div>
@@ -128,7 +131,7 @@ const Signup = () => {
                                     className="form-input"
                                     type={showPassword ? "text" : "password"}
                                     name="password"
-                                    value={password}    
+                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <button
