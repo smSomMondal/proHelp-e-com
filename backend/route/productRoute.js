@@ -1,8 +1,8 @@
 import express from "express";
-import { addProduct } from "../controller/productController.js";
+import { getAllProducts, addProduct } from "../controller/productController.js";
 
-const productApi = express.Router();
+const router = express.Router();
 
-productApi.post("/addProduct", addProduct);
+router.get("/products", getAllProducts); // ← USER PRODUCT LIST API
 
-export default productApi;
+export default router;

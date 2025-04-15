@@ -3,10 +3,12 @@ import User from "../model/userModel.js";
 const signUp = async (req, res) => {
     try {
         const { name, email, password, type, contact, address } = req.body;
-
+        //console.log(email,password);
+        //console.log(req.headers);
+        
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "User already exists" });
+        const existingUser = await User.findOne();
+        if (existingUser) return res.status(200).json({ message: "User already exists",data:existingUser });
 
         // Create new user
         const newUser = new User({ name, email, password, type, contact, address });

@@ -1,57 +1,53 @@
-import express from 'express'
-import dotenv  from 'dotenv';
-import './mongo.connect.js'
-import cors from 'cors'
-import User from './model/userModel.js';
-import userApi from './route/userRoute.js';
-import productApi from './route/productRoute.js';
-
-
-dotenv.config()
-const Port = process.env.PORT || 4000
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
-app.use(express.json())
-app.use(cors())
+app.use(cors());
+app.use(express.json());
 
+// MongoDB connection
+mongoose.connect('mongodb+srv://juhi57257:juhi123@cluster0.rrvvuyv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+  
+// Product schema
+const Product = mongoose.model('Product', {
+  name: String,
+  image: String,
+  price: Number,
+  category: String,
+});
 
-/*
-app.post("/signup", async(req, res) => {
-    try {
-        const { name, email, password, type, contact, address } = req.body;
+// Cart schema
+const CartItem = mongoose.model('CartItem', {
+  productId: String,
+  quantity: Number,
+});
 
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "User already exists" });
+// Routes
+app.get('/api/products', async (req, res) => {
+  const { search, category } = req.query;
+  let filter = {};
+  if (search) filter.name = new RegExp(search, 'i');
+  if (category) filter.category = category;
 
-        // Create new user
-        const newUser = new User({ name, email, password, type, contact, address });
-        await newUser.save();
+  const products = await Product.find(filter);
+  res.json(products);
+});
 
-        res.status(201).json({ message: "User created successfully", user: newUser });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
-})
-*/
+app.post('/api/cart', async (req, res) => {
+  const { productId, quantity } = req.body;
+  const item = new CartItem({ productId, quantity });
+  await item.save();
+  res.json({ message: 'Added to cart' });
+});
 
-
-//middleware
-
-/*
-const chq = (req,res,next)=>{
-    console.log("here chq");
-    next()
-}
-const cqq=(req,res)=>{
-    return res.send("hii");
-}*/
-app.get('/',(req,res)=>{
-    res.send("hiiii234")
-})
-
-app.use('/user',userApi)
-app.use('/product',productApi)
-
-
-app.listen(Port, () => { console.log(`app is running at http://127.0.0.1:${Port}`) })
+// Start server
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Backend running on http://localhost:${PORT}`);
+});
