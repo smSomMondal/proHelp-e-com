@@ -199,7 +199,7 @@ const Signup = () => {
                     </div>
 
                     <button className="submit-button" type="submit">
-                        <span className="button-text">Signin</span>
+                        <span className="button-text">Signup</span>
                         <div className="button-glow"></div>
                     </button>
 
