@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const cart = new mongoose.Schema({
+/*const cart = new mongoose.Schema({
     Id: {
         type: mongoose.Schema.Types.ObjectId,
     },
@@ -9,7 +9,7 @@ const cart = new mongoose.Schema({
         enum: ["add", "order", "buy"],
         default: "add",
     },
-});
+});*/
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -53,10 +53,13 @@ const productSchema = new mongoose.Schema({
     imagesUrl: {
         type: String,
     },
-    timeStamp: {
-        type: Date,        default: Date.now, // Auto-generates timestamp when a user is created
-    },
-});
+    orderList:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+        }
+    ],
+    
+},{timestamps:true});
 
 const Product = mongoose.model("Product", productSchema);
 
