@@ -54,8 +54,7 @@ const productSchema = new mongoose.Schema({
         type: String,
     },
     timeStamp: {
-        type: Date,
-        default: Date.now, // Auto-generates timestamp when a user is created
+        type: Date,        default: Date.now, // Auto-generates timestamp when a user is created
     },
 });
 
