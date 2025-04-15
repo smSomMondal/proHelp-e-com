@@ -18,7 +18,7 @@ function Home() {
       <p>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa exercitationem quasi nobis
         aperiam veritatis omnis laborum accusantium officiis odit nesciunt iure nostrum ex aliquid,
-        odio ut asperiores doloremque eveniet porro?
+        odio ut asperiores som doloremque eveniet porro?
       </p>
 
       {/* 👇 Product List Section */}
