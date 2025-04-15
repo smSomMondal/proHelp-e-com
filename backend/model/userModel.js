@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 
-const cart = new mongoose.Schema({
+/*const cart = new mongoose.Schema({
     priductId:{
         type : mongoose.Schema.Types.ObjectId,
         ref : "Product",
@@ -28,7 +28,7 @@ const cart = new mongoose.Schema({
         enum:["add","order","buy"],
         default:"add",
     }
-},{_id:true,timestamps:true});
+},{_id:true,timestamps:true});*/
 
 
 const userSchema = new mongoose.Schema({
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: ["buyer","seller","admin"], // Modify roles as per your needs
+        enum: ["buyer","seller","admin"],
         default: "buyer",
     },
     contact: {
@@ -60,10 +60,14 @@ const userSchema = new mongoose.Schema({
         district: { type: String},
         city: { type: String},
         pin: { type: String },
-        road: { type: String}, // Optional
-        houseNo: { type: String}, // Optional
+        road: { type: String},
+        houseNo: { type: String},
     },
-    cartlist:[cart],
+    //cartlist:[cart],
+    cartList:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+    }],
     productList:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",

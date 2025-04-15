@@ -32,13 +32,39 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["admin", "user", "vendor"], // Modify roles as per your needs
-        default: "user",
+        enum: [
+            "Fashion",
+            "Footwear",
+            "Electronics",
+            "Home & Kitchen",
+            "Beauty & Personal Care",
+            "Sports & Fitness",
+            "Baby Products",
+            "Grocery & Essentials",
+            "Gaming & Entertainment",
+            "Books & Stationery",
+            "Automotive"
+        ],
+        required: true
     },
     subcategory: {
         type: String,
-        enum: ["admin", "user", "vendor"], // Modify roles as per your needs
-        default: "user",
+        enum: [
+            "Men Clothing", "Women Clothing", "Kids Clothing",
+            "Men Footwear", "Women Footwear", "Kids Footwear",
+            "Mobiles & Tablets", "Laptops & Computers", "TV & Home Entertainment",
+            "Kitchen Appliances", "Home Decor", "Furniture",
+            "Makeup", "Skincare", "Haircare",
+            "Fitness Equipment", "Sportswear",
+            "Diapers", "Baby Toys",
+            "Snacks", "Staples",
+            "Video Games", "Gaming Accessories",
+            "Fiction", "Stationery",
+            "Car Accessories", "Bike Accessories"
+        ]
+    },
+    brand: {
+        type: String
     },
     stock: {
         type: String,
@@ -53,13 +79,14 @@ const productSchema = new mongoose.Schema({
     imagesUrl: {
         type: String,
     },
-    orderList:[
+    orderList: [
         {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "Cart",
         }
     ],
-    
-},{timestamps:true});
+
+}, { timestamps: true });
 
 const Product = mongoose.model("Product", productSchema);
 

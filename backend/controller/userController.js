@@ -1,25 +1,19 @@
 import expressAsyncHandler from "express-async-handler";
-// import User = require("../model/userModel");
-// import Book = require("../model/bookModel");
-// import generateToken = require("../utils/generateToken");
 import nodemailer from "nodemailer";
-// import { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
-// import { storage } = require('../config/firebase');
-// import uuid from 'uuid';
 import dotenv from 'dotenv';
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// const v4 = uuid.v4;
+
 dotenv.config();
 
-
+//by som
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 }
 
+//by som
 const registerUser = expressAsyncHandler(async (req, res) => {
 
     try {
@@ -51,6 +45,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
 });
 
+//by som
 const authUser = expressAsyncHandler(async (req, res) => {
 
     try {
@@ -79,6 +74,7 @@ const authUser = expressAsyncHandler(async (req, res) => {
 
 });
 
+//by som
 const updateUser = expressAsyncHandler(async (req, res) => {
     try {
         if (req.user._id) {
@@ -117,6 +113,7 @@ const updateUser = expressAsyncHandler(async (req, res) => {
     }
 });
 
+//by som
 const forgotPassword = expressAsyncHandler(async (req, res) => {
 
     try {
@@ -159,6 +156,7 @@ const forgotPassword = expressAsyncHandler(async (req, res) => {
     }
 });
 
+//by som
 const resetPassword = expressAsyncHandler(async (req, res) => {
 
 
