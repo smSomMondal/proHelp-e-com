@@ -17,30 +17,30 @@ const generateToken = (id) => {
 const registerUser = expressAsyncHandler(async (req, res) => {
 
     try {
-        console.log(req.body.name);
+        console.log(req.body);
+        
         const { name, email, password, contact, userType } = req.body;
         if (!name || !email || !contact || !userType || !password) {
-            res.status(400);
-            throw new Error("Please add all fields");
+            return res.status(400).json({ message: "Please fill all the fields" });
         }
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email });        
         if (existingUser) {
-            res.status(400);
-            throw new Error("User already exists");
+            console.log(existingUser);
+            return res.status(400).json({ message: "User already exists" });
+            
         }
         const user = await User.create({ name, email, password, contact, userType });
         if (user) {
-            res.status(201).json({
+            res.status(200).json({
                 message: "success"
             })
         }
         else {
-            res.status(400).json({ message: "Failed to create user" });
-            //throw new Error("Invalid user data");
+            res.status(400).json({ message: "invalid user data" });
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(400).json({ message: "Server error" });
 
     }
 
@@ -64,8 +64,7 @@ const authUser = expressAsyncHandler(async (req, res) => {
             });
         }
         else {
-            res.status(401);
-            throw new Error("Invalid email or password");
+            res.status(400).json({ message: "Password not match" });
         }
     } catch (error) {
         console.log(error);

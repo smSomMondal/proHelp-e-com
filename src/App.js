@@ -2,20 +2,13 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import ProductPage from './components/ProductPage';
 import AllProducts from './components/AllProducts';
-import Signup from './components/Signup';
+import ProductList from "./components/ProductList";
 import Login from './components/Login';
-import ProductList from './components/ProductList';
+import Signup from './components/Signup';
+
 
 
 function App() {
-  const user = {
-    name: "Alice",
-    contact: {
-      email: "alice@example.com",
-      phone: "123-456-7890"
-    }
-  };
-
   return (
     <>
       <div className="App">
@@ -29,9 +22,6 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            {/* <Route path="/" element={<Home />} />
-            <Route path="/con" element={<Contact />} />
-            <Route path="/abo" element={<About userInfo={user} />} /> */}
             <Route path="/products" element={<ProductList />} />
              <Route path="/productsT" element={<ProductPage />} />
           <Route path="/all-products" element={<AllProducts />} /> 
