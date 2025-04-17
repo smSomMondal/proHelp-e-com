@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
@@ -237,9 +237,9 @@ const Signup = () => {
                         </button>
 
                         <div className="form-footer">
-                            <a className="login-link">
-                                Don't have an account? <span>Sign in</span>
-                            </a>
+                            <div className="login-link">
+                                have an account? <span onClick={(e)=>nave('/login')}>Sign in</span>
+                            </div>
                         </div>
                     </form>
                 </div>

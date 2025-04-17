@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import { useContext } from "react";
-import { UserContext } from "../context/userContext";
+// import { useContext } from "react";
+import { useUser } from "../context/userContext";
 
 
 const Login = () => {
@@ -10,8 +11,9 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(UserContext);
+  const { login } = useUser();
 
+  const nave = useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
@@ -30,9 +32,12 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       });
+      //console.log(userRes);
       if (userRes.status === 200) {
         const user = userRes.data;
+        console.log(user);
         login(user);
+        nave("/products");
         //console.log("Login successful", userRes);
       }
     } catch (error) {
@@ -146,9 +151,9 @@ const Login = () => {
           </button>
 
           <div className="form-footer">
-            <a className="login-link">
-              Don't have an account? <span>Sign Up</span>
-            </a>
+            <div className="login-link">
+              Don't have an account? <span onClick={()=>nave('/signup')}>Sign Up</span>
+            </div>
           </div>
         </form>
       </div>
