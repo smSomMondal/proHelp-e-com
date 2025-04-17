@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./Login.css";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
@@ -15,12 +16,35 @@ const Login = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({ name, email, password });
-    console.log("Form submitted", { name, email, password });
-    // Handle form submission here
-    console.log("Form submitted");
+    try {
+
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      const userRes = await axios.put("http://127.0.0.1:5000/user/login", userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (userRes.status === 200) {
+        const user = userRes.data;
+        login(user);
+        //console.log("Login successful", userRes);
+      }
+    } catch (error) {
+      if (error.response.status === 400){
+        //console.log("Invalid credentials", error.response.data);
+        
+        alert(error.response.data.message);
+      }
+
+    }
+
+
   };
 
   return (
