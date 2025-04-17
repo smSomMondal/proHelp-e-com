@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./Login.css";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
@@ -8,7 +9,7 @@ const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [contact, setContact] = useState("");
-    const [userType, setUserType] = useState(""); // Added userType state
+    const [userType, setUserType] = useState("");
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
 
@@ -18,11 +19,40 @@ const Signup = () => {
         setShowPassword((prevState) => !prevState);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle form submission here
-        console.log("Form submitted", { name, email, contact, userType, password, rePassword });
-        console.log("Form submitted");
+        if (password !== rePassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+        const userData = {
+            name,
+            email,
+            contact,
+            userType,
+            password,
+        };
+        try {
+            const { data } = await axios.post('http://127.0.0.1:5000/user/signup', {
+                name,
+                email,
+                contact,
+                userType,
+                password,
+            }, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log(data);
+            
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("Signup failed. Please try again.");
+
+        }
+
     };
 
     return (

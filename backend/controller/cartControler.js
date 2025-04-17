@@ -1,7 +1,7 @@
 import Cart from '../models/Cart.js';
 import Product from '../models/productModel.js';
 import User from '../models/userModel.js';
-
+import expressAsyncHandler from 'express-async-handler';
 
 //by som
 const addToCart = async (req, res) => {
@@ -75,4 +75,21 @@ const updateCart = async (req, res) => {
   }
 };
 
-export { addToCart, updateCart };
+const orderCart = expressAsyncHandler(async (req, res) => {
+
+
+});
+const cancelCartUser = expressAsyncHandler(async (req, res) => {
+
+
+});
+const appOrder = expressAsyncHandler(async (req, res) => {
+
+
+});
+const canOrder = expressAsyncHandler(async (req, res) => {
+
+
+});
+
+export { addToCart, updateCart, orderCart, cancelCartUser, appOrder, canOrder };
