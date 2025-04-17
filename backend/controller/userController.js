@@ -17,6 +17,7 @@ const generateToken = (id) => {
 const registerUser = expressAsyncHandler(async (req, res) => {
 
     try {
+        console.log(req.body.name);
         const { name, email, password, contact, userType } = req.body;
         if (!name || !email || !contact || !userType || !password) {
             res.status(400);
