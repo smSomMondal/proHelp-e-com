@@ -10,10 +10,27 @@ const ProductPage = () => {
         name: "",
         description: "",
         price: "",
+        pId: "",
         category: "",
-        quantity: "",
-        image: ""
+        subcategory: "",
+        stock: "0",
+        sellerId: "",
+        imagesUrl: ""
     });
+
+    const categories = {
+        "Clothing": ["Men Clothing", "Women Clothing", "Kids Clothing"],
+        "Footwear": ["Men Footwear", "Women Footwear", "Kids Footwear"],
+        "Electronics": ["Mobiles & Tablets", "Laptops & Computers", "TV & Home Entertainment"],
+        "Home & Kitchen": ["Kitchen Appliances", "Home Decor", "Furniture"],
+        "Beauty & Personal Care": ["Makeup", "Skincare", "Haircare"],
+        "Sports & Fitness": ["Fitness Equipment", "Sportswear"],
+        "Baby Products": ["Diapers", "Baby Toys"],
+        "Grocery & Essentials": ["Snacks", "Staples"],
+        "Gaming & Entertainment": ["Video Games", "Gaming Accessories"],
+        "Books & Stationery": ["Fiction", "Stationery"],
+        "Automotive": ["Car Accessories", "Bike Accessories"]
+    };
 
     const fetchProducts = async () => {
         try {
@@ -34,7 +51,16 @@ const ProductPage = () => {
     }, []);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === "category") {
+            setFormData({
+                ...formData,
+                category: value,
+                subcategory: "" // Reset subcategory when category changes
+            });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -43,7 +69,17 @@ const ProductPage = () => {
             setLoading(true);
             await axios.post("http://localhost:5000/api/products/add", formData);
             fetchProducts();
-            setFormData({ name: "", description: "", price: "", category: "", quantity: "", image: "" });
+            setFormData({
+                name: "",
+                description: "",
+                price: "",
+                pId: "",
+                category: "",
+                subcategory: "",
+                stock: "0",
+                sellerId: "",
+                imagesUrl: ""
+            });
             setError(null);
         } catch (error) {
             setError("Failed to add product. Please try again.");
@@ -89,6 +125,15 @@ const ProductPage = () => {
                     </div>
                     <div className="form-group">
                         <input 
+                            name="pId" 
+                            placeholder="Product ID" 
+                            value={formData.pId} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input 
                             name="description" 
                             placeholder="Product Description" 
                             value={formData.description} 
@@ -107,29 +152,60 @@ const ProductPage = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <input 
+                        <select 
                             name="category" 
-                            placeholder="Category" 
                             value={formData.category} 
                             onChange={handleChange} 
-                            required 
-                        />
+                            required
+                        >
+                            <option value="">Select Category</option>
+                            {Object.keys(categories).map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <select 
+                            name="subcategory" 
+                            value={formData.subcategory} 
+                            onChange={handleChange} 
+                            required
+                            disabled={!formData.category}
+                        >
+                            <option value="">Select Subcategory</option>
+                            {formData.category && categories[formData.category].map((subcategory) => (
+                                <option key={subcategory} value={subcategory}>
+                                    {subcategory}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group">
                         <input 
-                            name="quantity" 
+                            name="stock" 
                             type="number" 
-                            placeholder="Quantity" 
-                            value={formData.quantity} 
+                            placeholder="Stock" 
+                            value={formData.stock} 
                             onChange={handleChange} 
                             required 
                         />
                     </div>
                     <div className="form-group">
                         <input 
-                            name="image" 
+                            name="sellerId" 
+                            placeholder="Seller ID" 
+                            value={formData.sellerId} 
+                            onChange={handleChange} 
+                            required 
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input 
+                            name="imagesUrl" 
                             placeholder="Image URL" 
-                            value={formData.image} 
+                            value={formData.imagesUrl} 
                             onChange={handleChange} 
                             required 
                         />
@@ -155,14 +231,17 @@ const ProductPage = () => {
                                     Delete
                                 </button>
                                 <img 
-                                    src={product.image || "https://via.placeholder.com/300x200?text=No+Image"} 
+                                    src={product.imagesUrl || "https://via.placeholder.com/300x200?text=No+Image"} 
                                     alt={product.name} 
                                 />
                                 <h3>{product.name}</h3>
+                                <p><strong>Product ID:</strong> {product.pId}</p>
                                 <p><strong>₹{product.price}</strong></p>
                                 <p>{product.description}</p>
-                                <p>Category: {product.category}</p>
-                                <p>Quantity: {product.quantity}</p>
+                                <p><strong>Category:</strong> {product.category}</p>
+                                <p><strong>Subcategory:</strong> {product.subcategory}</p>
+                                <p><strong>Stock:</strong> {product.stock}</p>
+                                <p><strong>Seller ID:</strong> {product.sellerId}</p>
                             </div>
                         ))}
                     </div>
