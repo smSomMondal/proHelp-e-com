@@ -6,6 +6,7 @@ import ProductList from "./components/ProductList";
 import Login from './components/Login';
 import Signup from './components/Signup';
 import {useUser} from './context/userContext';
+import SellerProductList from './components/SellerProductList';
 
 const PrivetComponent=()=>{
   //const {userType}=useUser()
@@ -25,6 +26,8 @@ function App() {
           <Route path="/" element={<ProductPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/juhi" element={<ProductList />} />
+            <Route path="/juhi2" element={<SellerProductList />} />
             <Route element={<PrivetComponent />}>
               <Route path="/products" element={<ProductList />} />
               <Route path="/productsT" element={<ProductPage />} />
