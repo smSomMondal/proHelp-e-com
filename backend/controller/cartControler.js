@@ -123,11 +123,46 @@ const cancelCartUser = expressAsyncHandler(async (req, res) => {
 
 });
 const appOrder = expressAsyncHandler(async (req, res) => {
+  try {
+    const { cartId } = req.body;
+    const cart = await cart.findById(cartId);
+    if (!cart) {
+      return res.status(404).json({ message: 'cart not found' });
+    }
+    if (cart !== stage) {
+      return res.status(400).json({ message: 'Only ordered carts can be approved by seller' });
+    }
+    cart.stage = 'APPROVED';
+    await cart.save();
+    res.status(500).json({ message: 'Ordered approve by seller', cart });
 
+
+  } catch (err) {
+    res.status(200).json({ message: 'error' + err.message });
+  }
 
 });
 const canOrder = expressAsyncHandler(async (req, res) => {
+  try {
+    const { cartId } = req.body;
 
+    const cart = await Cart.findById(cartId);
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    if (cart.stage !== 'ORDERED') {
+      return res.status(400).json({ message: 'Only ordered carts can be cancelled by seller' });
+    }
+
+    cart.stage = 'CANCELLED_BY_SELLER';
+    await cart.save();
+
+    res.status(200).json({ message: 'Order cancelled by seller', cart });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error: ' + err.message });
+  }
 
 });
 
