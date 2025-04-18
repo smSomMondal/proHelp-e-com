@@ -45,7 +45,8 @@ const Signup = () => {
             //console.log(data.data.status);
             if (data.status === 200) {
                 console.log("Signup successful", data); 
-                nave("/login")        
+                nave("/login")    
+                    
             }          
 
         }catch (error) {    
