@@ -1,6 +1,6 @@
 import express from 'express';
 import {chqProtectedUser,chqSeler} from '../middleware/userMiddleware.js';
-import { addToCart, updateCart, orderCart,cancelCartUser,canOrder ,appOrder} from '../controllers/cartController.js';
+import {  addToCart, updateCart, orderCart, cancelCartUser, appOrder, canOrder } from '../controller/cartControler.js';
 
 const cartApi = express.Router();
 

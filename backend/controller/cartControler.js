@@ -1,6 +1,6 @@
-import Cart from '../models/Cart.js';
-import Product from '../models/productModel.js';
-import User from '../models/userModel.js';
+import Cart from '../model/cartModel.js';
+import Product from '../model/productModel.js';
+import User from '../model/userModel.js';
 import expressAsyncHandler from 'express-async-handler';
 
 //by som

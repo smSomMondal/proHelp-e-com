@@ -8,13 +8,12 @@ const ProductPage = () => {
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         name: "",
+        brand: "",
         description: "",
         price: "",
-        pId: "",
         category: "",
         subcategory: "",
         stock: "0",
-        sellerId: "",
         imagesUrl: ""
     });
 
@@ -34,9 +33,18 @@ const ProductPage = () => {
 
     const fetchProducts = async () => {
         try {
+            const storedData = JSON.parse(localStorage.getItem('token'));
+            const token = storedData?.token;
             setLoading(true);
-            const { data } = await axios.get("http://localhost:5000/api/products");
-            setProducts(data);
+            const { data } = await axios.put("http://localhost:5000/product/getProduct",{},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+            setProducts(data.product);
             setError(null);
         } catch (err) {
             setError("Failed to fetch products. Please try again later.");
@@ -66,8 +74,18 @@ const ProductPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const storedData = JSON.parse(localStorage.getItem('token'));
+            const token = storedData?.token;
             setLoading(true);
-            await axios.post("http://localhost:5000/api/products/add", formData);
+            await axios.post("http://localhost:5000/product/addProduct",
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
             fetchProducts();
             setFormData({
                 name: "",
@@ -108,54 +126,54 @@ const ProductPage = () => {
     return (
         <div className="product-page">
             <h2>Product Management</h2>
-            
+
             {error && <div className="error-message">{error}</div>}
-            
+
             <div className="product-form-container">
                 <h3>Add New Product</h3>
                 <form className="product-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <input 
-                            name="name" 
-                            placeholder="Product Name" 
-                            value={formData.name} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="name"
+                            placeholder="Product Name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                     <div className="form-group">
-                        <input 
-                            name="pId" 
-                            placeholder="Product ID" 
-                            value={formData.pId} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="brand"
+                            placeholder="Brand"
+                            value={formData.brand}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                     <div className="form-group">
-                        <input 
-                            name="description" 
-                            placeholder="Product Description" 
-                            value={formData.description} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="description"
+                            placeholder="Product Description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                     <div className="form-group">
-                        <input 
-                            name="price" 
-                            type="number" 
-                            placeholder="Price (₹)" 
-                            value={formData.price} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="price"
+                            type="number"
+                            placeholder="Price (₹)"
+                            value={formData.price}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                     <div className="form-group">
-                        <select 
-                            name="category" 
-                            value={formData.category} 
-                            onChange={handleChange} 
+                        <select
+                            name="category"
+                            value={formData.category}
+                            onChange={handleChange}
                             required
                         >
                             <option value="">Select Category</option>
@@ -167,10 +185,10 @@ const ProductPage = () => {
                         </select>
                     </div>
                     <div className="form-group">
-                        <select 
-                            name="subcategory" 
-                            value={formData.subcategory} 
-                            onChange={handleChange} 
+                        <select
+                            name="subcategory"
+                            value={formData.subcategory}
+                            onChange={handleChange}
                             required
                             disabled={!formData.category}
                         >
@@ -183,16 +201,16 @@ const ProductPage = () => {
                         </select>
                     </div>
                     <div className="form-group">
-                        <input 
-                            name="stock" 
-                            type="number" 
-                            placeholder="Stock" 
-                            value={formData.stock} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="stock"
+                            type="number"
+                            placeholder="Stock"
+                            value={formData.stock}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <input 
                             name="sellerId" 
                             placeholder="Seller ID" 
@@ -200,20 +218,19 @@ const ProductPage = () => {
                             onChange={handleChange} 
                             required 
                         />
-                    </div>
+                    </div> */}
                     <div className="form-group">
-                        <input 
-                            name="imagesUrl" 
-                            placeholder="Image URL" 
-                            value={formData.imagesUrl} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            name="imagesUrl"
+                            placeholder="Image URL"
+                            value={formData.imagesUrl}
+                            onChange={handleChange}
                         />
                     </div>
                     <button type="submit">Add Product</button>
                 </form>
             </div>
-            
+
             <div className="products-container">
                 <h3>Product List</h3>
                 {loading ? (
@@ -224,15 +241,15 @@ const ProductPage = () => {
                     <div className="product-list">
                         {products.map((product) => (
                             <div key={product._id} className="product-card">
-                                <button 
-                                    className="delete-button" 
+                                <button
+                                    className="delete-button"
                                     onClick={() => handleDelete(product._id)}
                                 >
                                     Delete
                                 </button>
-                                <img 
-                                    src={product.imagesUrl || "https://via.placeholder.com/300x200?text=No+Image"} 
-                                    alt={product.name} 
+                                <img
+                                    src={product.imagesUrl || "https://via.placeholder.com/300x200?text=No+Image"}
+                                    alt={product.name}
                                 />
                                 <h3>{product.name}</h3>
                                 <p><strong>Product ID:</strong> {product.pId}</p>

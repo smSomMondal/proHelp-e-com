@@ -5,7 +5,7 @@ import cors from 'cors'
 import userApi from './route/userRoute.js';
 import productApi from './route/productRoute.js';
 import bodyParser from 'body-parser';
-//import cartApi from './route/cartRoute.js';
+import cartApi from './route/cartRoute.js';
 
 
 dotenv.config()
@@ -17,8 +17,8 @@ app.use(cors())
 
 
 app.use('/user',userApi)
-/*app.use('/product',productApi)
-app.use('/cart',cartApi)*/
+app.use('/product',productApi)
+app.use('/cart',cartApi)
 
 
 app.listen(Port, () => { console.log(`app is running at http://127.0.0.1:${Port}`) })
