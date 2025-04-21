@@ -59,7 +59,7 @@ const updateCart = async (req, res) => {
   try {
 
     const { cartId, quantity } = req.body;
-
+    
     const cart = await Cart.findOneAndUpdate(
       { _id: cartId },
       { $set: { 'items.quantity': quantity } },
@@ -78,13 +78,27 @@ const updateCart = async (req, res) => {
 
 const orderCart = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId } = req.body;
-    const cart = await cart.findOne({ user: userId }).populate('product');
+    const { orderItem } = req.body;
+    const cart = await Cart.findById(orderItem);
 
     if (!cart) {
       return res.status(404).json({ message: 'cart not found' });
     }
+    if (cart.user !== req.user._id) {
+      return res.status(403).json({ message: 'You are not authorized to order this cart' });
+    }
 
+    let product = await Product.findById(cart.product);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    product.orderList.push(cart._id);
+    await product.save();
+    if (!product) {
+      return res.status(500).json({ message: 'Failed to save product order' });
+    }
+    cart.items.priceAtTime = product.price;
     cart.stage = 'ORDERED';//update the cart after order
     await cart.save();
 
@@ -105,11 +119,24 @@ const orderCart = expressAsyncHandler(async (req, res) => {
 
 const cancelCartUser = expressAsyncHandler(async (req, res) => {
   try {
-    const { userId } = req.body;
-    const cart = await cart.findOne({ user: userId });
+    const { orderItem } = req.body;
+    const cart = await Cart.findById(orderItem);
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
+    if (cart.user !== req.user._id) {
+      return res.status(403).json({ message: 'You are not authorized to cancel this cart' });
+    }
+    if (cart.stage !== 'ORDERED') {
+      return res.status(400).json({ message: 'Only ordered carts can be cancelled by user' });
+    }
+    // Remove cart from product's orderList
+    let product = await Product.findById(cart.product);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    product.orderList = product.orderList.filter((item) => item.toString() !== cart._id.toString());
+    await product.save();
     cart.stage = 'CANCELLED';
     await cart.save();
     res.status(200).json({
@@ -122,26 +149,44 @@ const cancelCartUser = expressAsyncHandler(async (req, res) => {
   }
 
 });
+
+
 const appOrder = expressAsyncHandler(async (req, res) => {
   try {
     const { cartId } = req.body;
-    const cart = await cart.findById(cartId);
+    const cart = await Cart.findById(cartId);
     if (!cart) {
       return res.status(404).json({ message: 'cart not found' });
     }
-    if (cart !== stage) {
+    let product = await Product.findById(cart.product);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });  
+    }
+    if (product.sellerId !== req.user._id) {
+      return res.status(403).json({ message: 'You are not authorized to approve this cart' });
+    }
+    if (cart.stage !== 'ORDERED') {
       return res.status(400).json({ message: 'Only ordered carts can be approved by seller' });
+    }
+    if(cart.items.quantity > product.quantity){
+      return res.status(400).json({ message: 'Quantity is not available' });
+    }
+    product.quantity -= cart.items.quantity;
+    product.orderList = product.orderList.filter((item) => item.toString() !== cart._id.toString()); 
+    await product.save();
+    if (!product) {
+      return res.status(500).json({ message: 'Failed to save product quantity' });
     }
     cart.stage = 'APPROVED';
     await cart.save();
     res.status(500).json({ message: 'Ordered approve by seller', cart });
-
 
   } catch (err) {
     res.status(200).json({ message: 'error' + err.message });
   }
 
 });
+
 const canOrder = expressAsyncHandler(async (req, res) => {
   try {
     const { cartId } = req.body;
@@ -155,9 +200,20 @@ const canOrder = expressAsyncHandler(async (req, res) => {
       return res.status(400).json({ message: 'Only ordered carts can be cancelled by seller' });
     }
 
-    cart.stage = 'CANCELLED_BY_SELLER';
+    let product = await Product.findById(cart.product);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    if(product.sellerId !== req.user._id){
+      return res.status(403).json({ message: 'You are not authorized to cancel this cart' });
+    }
+    product.orderList = product.orderList.filter((item) => item.toString() !== cart._id.toString()); 
+    await product.save();
+    if (!product) {
+      return res.status(500).json({ message: 'Failed to save product quantity' });
+    }
+    cart.stage = 'CANCELLED';
     await cart.save();
-
     res.status(200).json({ message: 'Order cancelled by seller', cart });
   } catch (err) {
     console.error(err);
