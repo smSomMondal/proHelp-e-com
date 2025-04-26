@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv  from 'dotenv';
-import './mongo.connect.js'
-import cors from 'cors'
+import './mongo.connect.js';
+import cors from 'cors';
 import userApi from './route/userRoute.js';
 import productApi from './route/productRoute.js';
 import bodyParser from 'body-parser';
