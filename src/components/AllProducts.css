@@ -111,9 +111,11 @@
   
   .all-products-page .product-actions {
     display: flex;
-    justify-content: flex-end;
     margin-bottom: 10px;
     gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
   
   .all-products-page .product-actions button {

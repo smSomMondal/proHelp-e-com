@@ -156,28 +156,6 @@ const AllProductsPage = () => {
           <div className="product-list">
             {filteredProducts.map((product) => (
               <div key={product._id} className="product-card">
-                <div className="product-actions">
-                  {editingProductId === product._id ? (
-                    <>
-                      <button className="update-button" onClick={() => handleUpdateSubmit(product._id)}>
-                        Update
-                      </button>
-                      <button className="cancel-button" onClick={() => handleCancelEdit(product._id)}>
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <button className="edit-button" onClick={() => handleEdit(product._id)}>
-                      Edit
-                    </button>
-                  )}
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
                 <img
                   src={
                     product.imagesUrl ||
@@ -268,6 +246,28 @@ const AllProductsPage = () => {
                     <strong>Seller ID:</strong> {product.sellerId}
                   </p>
                 )}
+                <div className="product-actions">
+                  {editingProductId === product._id ? (
+                    <>
+                      <button className="update-button" onClick={() => handleUpdateSubmit(product._id)}>
+                        Update
+                      </button>
+                      <button className="cancel-button" onClick={() => handleCancelEdit(product._id)}>
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button className="edit-button" onClick={() => handleEdit(product._id)}>
+                      Edit
+                    </button>
+                  )}
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>
