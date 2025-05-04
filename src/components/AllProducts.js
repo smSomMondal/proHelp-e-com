@@ -63,13 +63,13 @@ const AllProductsPage = () => {
         const storedData = JSON.parse(localStorage.getItem("token"));
         const token = storedData?.token;
         setLoading(true);
-        await axios.delete(`http://localhost:5000/api/products/${id}`, {
-          data: { pId: id },
-          headers: {
+        await axios.post(`http://localhost:5000/product/deleteProduct`,
+          { _id: id },
+          {headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-          },
-        });
+          }}
+        );
         fetchProducts();
         setError(null);
       } catch (error) {
@@ -97,11 +97,13 @@ const AllProductsPage = () => {
 
   const handleUpdateSubmit = async (id) => {
     try {
+
+      console.log(editFormData[id])
       const storedData = JSON.parse(localStorage.getItem("token"));
       const token = storedData?.token;
       setLoading(true);
-      await axios.put(
-        `http://localhost:5000/api/products/${id}`,
+      await axios.post(
+        `http://localhost:5000/product/updateProduct`,
         editFormData[id],
         {
           headers: {
