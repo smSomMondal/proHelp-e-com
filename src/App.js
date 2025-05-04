@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Routes, Route,Outlet } from 'react-router-dom';
 import ProductPage from './components/ProductPage';
 import AllProducts from './components/AllProducts';
@@ -20,12 +20,17 @@ const PrivetComponent=()=>{
 
 
 function App() {
+  const [userType,setUsertype] = useState()
+  useEffect(()=>{
+    const storedUser = localStorage.getItem("user");
+    setUsertype(storedUser.userType)
+  },[])
   return (
     <>
       <div className="App">
-        <BrowserRouter>
-        <Navbar/>
-        <NavbarCus/>
+      
+        <BrowserRouter>        
+        {(userType==='seller')?(<Navbar/>):(<NavbarCus/>)}
           <Routes>
           <Route path="/" element={<ProductPage />} />
             <Route path="/login" element={<Login />} />
