@@ -56,17 +56,17 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
     try {
 
         const {
+            _id,
             name,
             description,
             price,
-            pId,
             category,
             subcategory,
             stock,
             imagesUrl
         } = req.body;
 
-        const prod = await Product.findById(pId).select("-orderList");
+        const prod = await Product.findById(_id).select("-orderList");
 
         if (!prod) {
             return res.status(404).json({ message: "Product not found" });
@@ -105,8 +105,8 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
 const deleteProduct = expressAsyncHandler(async (req, res) => {
 
     try {
-        const { pId } = req.body;
-        const prod = await Product.findById(pId);
+        const { _id } = req.body;
+        const prod = await Product.findById(_id);
         if (!prod) {
             return res.status(404).json({ message: "Product not found" });
         }
@@ -116,7 +116,7 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
 
         await Cart.updateMany(
             {
-                product: pId,
+                product: _id,
                 stage: 'ORDERED'
             },
             {
@@ -125,7 +125,7 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
                 }
             }
         );
-        const result = await Product.deleteOne({ _id: pId });
+        const result = await Product.deleteOne({ _id});
 
         if (result.deletedCount > 0) {
             return res.status(200).json({ message: "Product deleted successfully" });

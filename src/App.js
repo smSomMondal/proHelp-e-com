@@ -8,6 +8,7 @@ import Signup from './components/Signup';
 import {useUser} from './context/userContext';
 import SellerProductList from './components/SellerProductList';
 import Navbar from './components/Navbar';
+import NavbarCus from './components/NavbarCus';
 
 const PrivetComponent=()=>{
   //const {userType}=useUser()
@@ -24,6 +25,7 @@ function App() {
       <div className="App">
         <BrowserRouter>
         <Navbar/>
+        <NavbarCus/>
           <Routes>
           <Route path="/" element={<ProductPage />} />
             <Route path="/login" element={<Login />} />
