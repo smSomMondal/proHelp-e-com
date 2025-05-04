@@ -63,8 +63,11 @@ const AllProductsPage = () => {
         const storedData = JSON.parse(localStorage.getItem("token"));
         const token = storedData?.token;
         setLoading(true);
-        await axios.delete(`http://localhost:5000/api/products/${id}`, {
-          data: { pId: id },
+        console.log(token);
+        
+        await axios.post("http://localhost:5000/product/deleteProduct",
+          { pId: id },
+          {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -100,8 +103,8 @@ const AllProductsPage = () => {
       const storedData = JSON.parse(localStorage.getItem("token"));
       const token = storedData?.token;
       setLoading(true);
-      await axios.put(
-        `http://localhost:5000/api/products/${id}`,
+      await axios.post(
+        `http://localhost:5000/updateProduct`,
         editFormData[id],
         {
           headers: {
@@ -123,7 +126,6 @@ const AllProductsPage = () => {
 
   const handleCancelEdit = (id) => {
     setEditingProductId(null);
-    // Revert changes by resetting to the initially fetched data
     setEditFormData(prevData => ({
       ...prevData,
       [id]: { ...products.find(p => p._id === id) },
