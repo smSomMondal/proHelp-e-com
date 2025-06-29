@@ -35,10 +35,10 @@ function App() {
           <Route path="/" element={<ProductPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/juhi" element={<ProductList />} />
+            <Route path="/juhi45" element={<ProductList />} />
             <Route path="/juhi2" element={<SellerProductList />} />
             <Route element={<PrivetComponent />}>
-              <Route path="/products" element={<ProductList />} />
+              <Route path="/productsxx" element={<ProductList />} />
               <Route path="/productsT" element={<ProductPage />} />
               <Route path="/all-products" element={<AllProducts />} />
             </Route>
